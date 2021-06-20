@@ -1,4 +1,12 @@
+const validator = require('validator');
+const bcrypt = require('bcryptjs');
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
+const CastError = require('../errors/cast-error');
+const NotFoundError = require('../errors/not-found-err');
+const ValidationError = require('../errors/validation-error');
+const LoginPasswordError = require('../errors/login-password-error');
+
 
 const formattedUser = function (user) {
   return {
@@ -9,58 +17,126 @@ const formattedUser = function (user) {
   };
 };
 
-const catchError = function (err, res) {
-  if (err.name === 'ValidationError') {
-    return res.status(400).send({ message: 'Переданы некорректные данные' });
-  }
-  if (err.name === 'CastError') {
-    return res.status(400).send({ message: 'Переданы некорректные данные' });
-  }
 
-  return res.status(500).send({ message: err.name });
-};
 
 const cathIdError = function (res, user) {
   if (!user) {
-    return res.status(404).send({ message: 'Данные не найдены' });
+    throw new NotFoundError('Данные не найдены');
   }
   return res.send({ data: formattedUser(user) });
 };
 
-exports.usersGet = function (req, res) {
+exports.usersGet = function (req, res, next) {
   User.find({})
     .then((users) => res.send({ data: users.map(formattedUser) }))
-    .catch((err) => catchError(err, res));
+    .catch(next);
 };
 
-exports.usersGetId = function (req, res) {
+exports.usersGetId = function (req, res, next) {
   User.findById(req.params.id)
     .then((user) => cathIdError(res, user))
-    .catch((err) => catchError(err, res));
+    .catch(next);
 };
 
-exports.usersPost = function (req, res) {
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
+exports.usersGetMe = function (req, res, next) {
+  User.findById(req.user._id)
+
+    .then((user) => cathIdError(res, user))
+    .catch(next);
+};
+
+
+
+exports.usersLogin = function (req, res, next) {
+  const { email, password } = req.body;
+  let findedUser;
+  User.findOne({ email }).select('+password')
+  .then((user) => {
+    if (!user) {
+     
+      throw new LoginPasswordError('Неправильные почта или пароль')
+    }
+
+    findedUser = user;
+    return bcrypt.compare(password, user.password);
+  })
+  .then((matched) => {
+    if (!matched) {
+      
+      throw new LoginPasswordError('Неправильные почта или пароль')
+    }
+
+    // создадим токен
+    const token = jwt.sign({ _id: findedUser._id }, 'secret-key', { expiresIn: '7d' });
+
+    // вернём токен
+    res
+      .cookie('jwt', token, {
+            // token - наш JWT токен, который мы отправляем
+        maxAge: 604800000,
+        httpOnly: true
+      })
+      .end();
+  })
+  .catch(next);
+};
+
+
+
+
+
+
+
+exports.usersPost = function (req, res, next) {
+  const {
+    name, about, avatar, email,
+  } = req.body;
+  if (!req.body.password || req.body.password.length < 3) {
+    throw new ValidationError('Слишком короткий пароль');
+    
+  }
+  if (!validator.isEmail(req.body.email)) {
+    throw new ValidationError('Некорректный email');
+   
+  }
+
+  User.findOne({ email: req.body.email })
+    .then((oldUser) => {
+      if (oldUser) {
+        throw new ValidationError('Пользователь с таким email уже существует');
+        
+      }
+      
+
+      return bcrypt.hash(req.body.password, 10)
+    })
+    .then((hash) => User.create({
+      
+          name, about, avatar, email, password: hash,
+        }))
+
     .then((user) => res.send({ data: formattedUser(user) }))
-    .catch((err) => catchError(err, res));
+     
+    .catch(next);
 };
 
-exports.usersPatch = function (req, res) {
+exports.usersPatch = function (req, res, next) {
   User.findByIdAndUpdate(
     req.user._id,
     { name: req.body.name, about: req.body.about },
     { new: true, runValidators: true },
   )
     .then((user) => cathIdError(res, user))
-    .catch((err) => catchError(err, res));
+    .catch(next);
 };
-exports.usersPatchAva = function (req, res) {
+
+
+exports.usersPatchAva = function (req, res, next) {
   User.findByIdAndUpdate(
     req.user._id,
     { avatar: req.body.avatar },
     { new: true, runValidators: true },
   )
     .then((user) => cathIdError(res, user))
-    .catch((err) => catchError(err, res));
+    .catch(next);
 };
