@@ -1,12 +1,10 @@
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const User = require('../models/user');
 const jwt = require('jsonwebtoken');
-const CastError = require('../errors/cast-error');
+const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 const ValidationError = require('../errors/validation-error');
 const LoginPasswordError = require('../errors/login-password-error');
-
 
 const formattedUser = function (user) {
   return {
@@ -16,8 +14,6 @@ const formattedUser = function (user) {
     avatar: user.avatar,
   };
 };
-
-
 
 const cathIdError = function (res, user) {
   if (!user) {
@@ -45,47 +41,37 @@ exports.usersGetMe = function (req, res, next) {
     .catch(next);
 };
 
-
-
 exports.usersLogin = function (req, res, next) {
   const { email, password } = req.body;
   let findedUser;
   User.findOne({ email }).select('+password')
-  .then((user) => {
-    if (!user) {
-     
-      throw new LoginPasswordError('Неправильные почта или пароль')
-    }
+    .then((user) => {
+      if (!user) {
+        throw new LoginPasswordError('Неправильные почта или пароль');
+      }
 
-    findedUser = user;
-    return bcrypt.compare(password, user.password);
-  })
-  .then((matched) => {
-    if (!matched) {
-      
-      throw new LoginPasswordError('Неправильные почта или пароль')
-    }
+      findedUser = user;
+      return bcrypt.compare(password, user.password);
+    })
+    .then((matched) => {
+      if (!matched) {
+        throw new LoginPasswordError('Неправильные почта или пароль');
+      }
 
-    // создадим токен
-    const token = jwt.sign({ _id: findedUser._id }, 'secret-key', { expiresIn: '7d' });
+      // создадим токен
+      const token = jwt.sign({ _id: findedUser._id }, 'secret-key', { expiresIn: '7d' });
 
-    // вернём токен
-    res
-      .cookie('jwt', token, {
-            // token - наш JWT токен, который мы отправляем
-        maxAge: 604800000,
-        httpOnly: true
-      })
-      .end();
-  })
-  .catch(next);
+      // вернём токен
+      res
+        .cookie('jwt', token, {
+          // token - наш JWT токен, который мы отправляем
+          maxAge: 604800000,
+          httpOnly: true,
+        })
+        .end();
+    })
+    .catch(next);
 };
-
-
-
-
-
-
 
 exports.usersPost = function (req, res, next) {
   const {
@@ -93,30 +79,26 @@ exports.usersPost = function (req, res, next) {
   } = req.body;
   if (!req.body.password || req.body.password.length < 3) {
     throw new ValidationError('Слишком короткий пароль');
-    
   }
   if (!validator.isEmail(req.body.email)) {
     throw new ValidationError('Некорректный email');
-   
   }
 
   User.findOne({ email: req.body.email })
     .then((oldUser) => {
       if (oldUser) {
         throw new ValidationError('Пользователь с таким email уже существует');
-        
       }
-      
 
-      return bcrypt.hash(req.body.password, 10)
+      return bcrypt.hash(req.body.password, 10);
     })
     .then((hash) => User.create({
-      
-          name, about, avatar, email, password: hash,
-        }))
+
+      name, about, avatar, email, password: hash,
+    }))
 
     .then((user) => res.send({ data: formattedUser(user) }))
-     
+
     .catch(next);
 };
 
@@ -129,7 +111,6 @@ exports.usersPatch = function (req, res, next) {
     .then((user) => cathIdError(res, user))
     .catch(next);
 };
-
 
 exports.usersPatchAva = function (req, res, next) {
   User.findByIdAndUpdate(

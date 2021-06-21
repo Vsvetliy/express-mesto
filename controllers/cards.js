@@ -1,11 +1,7 @@
-const card = require('../models/card');
 const Cards = require('../models/card');
-const CastError = require('../errors/cast-error');
+
 const NotFoundError = require('../errors/not-found-err');
 const ValidationError = require('../errors/validation-error');
-
-
-
 
 const cathIdError = function (res, card) {
   if (!card) {
@@ -26,26 +22,22 @@ exports.cardsPost = function (req, res, next) {
     .catch(next);
 };
 
-
-//удаление карточки
+// удаление карточки
 exports.cardsDel = function (req, res, next) {
-  
   Cards.findById(req.params.cardId)
-.then((card) => {
-  if(!card){
-    throw new ValidationError('Данные не найдены');
-  }
-  if(req.user._id !== card.owner._id){
-    throw new ValidationError('Удаление запрещено');
-  }
-  return Cards.findByIdAndRemove(req.params.cardId)
-})
-  
+    .then((card) => {
+      if (!card) {
+        throw new ValidationError('Данные не найдены');
+      }
+      if (req.user._id !== card.owner._id) {
+        throw new ValidationError('Удаление запрещено');
+      }
+      return Cards.findByIdAndRemove(req.params.cardId);
+    })
+
     .then((card) => cathIdError(res, card))
     .catch(next);
 };
-
-
 
 exports.cardsAddLikes = function (req, res, next) {
   Cards.findByIdAndUpdate(
