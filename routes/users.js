@@ -8,23 +8,6 @@ usersRout.get('/', usersControl.usersGet);
 usersRout.get('/me', usersControl.usersGetMe);
 usersRout.get('/:id', usersControl.usersGetId);
 
-// usersRout.post('/signin', celebrate({
-//   body: Joi.object().keys({
-//     email: Joi.string().required().min(2).max(30),
-//     password: Joi.string().required().min(2),
-//   }),
-// }), usersControl.usersLogin);
-
-// usersRout.post('/signup', celebrate({
-//   body: Joi.object().keys({
-//     name: Joi.string().required().min(2).max(30),
-//     about: Joi.string().required().min(2).max(30),
-//     avatar: Joi.string().required(),
-//     email: Joi.string().required().min(2).max(30),
-//     password: Joi.string().required().min(2),
-//   }),
-// }), usersControl.usersPost);
-
 usersRout.patch('/me', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
