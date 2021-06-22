@@ -3,14 +3,14 @@ const LoginPasswordError = require('../errors/login-password-error');
 
 module.exports = (req, res, next) => {
   // достаём авторизационный заголовок
-  const { authorization } = req.headers;
+  const authorization = req.headers.cookie;
 
   // убеждаемся, что он есть или начинается с Bearer
-  if (!authorization || !authorization.startsWith('Bearer ')) {
+  if (!authorization || !authorization.startsWith('jwt=')) {
     throw new LoginPasswordError('Необходима авторизация');
   }
 
-  const token = authorization.replace('Bearer ', '');
+  const token = authorization.replace('jwt=', '');
   let payload;
   try {
     // попытаемся верифицировать токен

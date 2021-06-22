@@ -68,6 +68,7 @@ exports.usersLogin = function (req, res, next) {
           maxAge: 604800000,
           httpOnly: true,
         })
+        .send({ message: 'Авторизация успешна' })
         .end();
     })
     .catch(next);

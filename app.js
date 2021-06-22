@@ -49,5 +49,5 @@ app.use('/*', (req, res) => {
 app.use(errors);
 
 app.listen(PORT, () => {
-  console.log(`App listening on port port ${PORT}`);
+  console.log(`App listening on porl ${PORT}`);
 });
