@@ -2,6 +2,7 @@ const Cards = require('../models/card');
 
 const NotFoundError = require('../errors/not-found-err');
 const ValidationError = require('../errors/validation-error');
+const Forbidden = require('../errors/forbidden');
 
 const cathIdError = function (res, card) {
   if (!card) {
@@ -16,7 +17,9 @@ exports.cardsGet = function (req, res, next) {
     .catch(next);
 };
 exports.cardsPost = function (req, res, next) {
-  const { name, link, owner } = req.body;
+  const { name, link } = req.body;
+  const owner = req.user._id;
+  console.log(req.user._id);
   Cards.create({ name, link, owner })
     .then((card) => res.send({ data: card }))
     .catch(next);
@@ -30,7 +33,7 @@ exports.cardsDel = function (req, res, next) {
         throw new ValidationError('Данные не найдены');
       }
       if (req.user._id !== card.owner._id) {
-        throw new ValidationError('Удаление запрещено');
+        throw new Forbidden('Доступ запрещён');
       }
       return Cards.findByIdAndRemove(req.params.cardId);
     })
