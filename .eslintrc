@@ -4,7 +4,8 @@
     "no-console": "off",
     "func-names": "off",
     "no-unused-vars": "off",
-    "consistent-return":"off"
+    "consistent-return":"off",
+    "eqeqeq":"off"
   },
   "extends": "airbnb-base"
 }
