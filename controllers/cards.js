@@ -32,10 +32,9 @@ exports.cardsDel = function (req, res, next) {
       if (!card) {
         throw new NotFoundError('Данные не найдены');
       }
-      console.log(typeof req.user._id);
-      console.log(typeof card.owner._id);
+
       if (req.user._id != card.owner._id) {
-        throw new Forbidden('1111Доступ запрещён');
+        throw new Forbidden('Доступ запрещён');
       }
       return Cards.findByIdAndRemove(req.params.cardId);
     })
