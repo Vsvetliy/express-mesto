@@ -7,6 +7,7 @@ const cardsRout = require('./routes/cards');
 const auth = require('./middlewares/auth');
 const errors = require('./middlewares/errors');
 const NotFoundError = require('./errors/not-found-err');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 mongoose.connect('mongodb://localhost:27017/mestodb', {
@@ -19,6 +20,8 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 const app = express();
 
 app.use(express.json());
+// логгер запросов
+app.use(requestLogger);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -45,7 +48,8 @@ app.use('/cards', cardsRout);
 app.use('/*', (req, res) => {
   throw new NotFoundError('Cтраница не найдена');
 });
-
+//  логгер ошибок
+app.use(errorLogger);
 app.use(errors);
 
 app.listen(PORT, () => {
