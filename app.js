@@ -9,6 +9,10 @@ const errors = require('./middlewares/errors');
 const NotFoundError = require('./errors/not-found-err');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
+const allowedCors = [
+  'http://mesto.kolomeytsev.nomoredomains.club',
+];
+
 const { PORT = 3000 } = process.env;
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
@@ -18,6 +22,16 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 });
 
 const app = express();
+
+app.use((req, res, next) => {
+  const { origin } = req.headers; // Сохраняем источник запроса в переменную origin
+  // проверяем, что источник запроса есть среди разрешённых
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+
+  next();
+});
 
 app.use(express.json());
 // логгер запросов
