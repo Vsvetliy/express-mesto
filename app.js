@@ -48,7 +48,7 @@ app.use(auth);
 
 //app.use('/cards', cardsRout);
 
-app.use('/*', (req, res) => {
+//app.use('/*', (req, res) => {
   throw new NotFoundError('Cтраница не найдена');
 });
 //  логгер ошибок
