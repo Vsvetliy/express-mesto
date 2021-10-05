@@ -1,13 +1,13 @@
-// const express = require('express');
-// const mongoose = require('mongoose');
-// const { celebrate, Joi } = require('celebrate');
-// const usersRout = require('./routes/users');
-// const usersControl = require('./controllers/users');
-// const cardsRout = require('./routes/cards');
-// const auth = require('./middlewares/auth');
-// const errors = require('./middlewares/errors');
-// const NotFoundError = require('./errors/not-found-err');
-// const { requestLogger, errorLogger } = require('./middlewares/logger');
+const express = require('express');
+const mongoose = require('mongoose');
+const { celebrate, Joi } = require('celebrate');
+const usersRout = require('./routes/users');
+const usersControl = require('./controllers/users');
+const cardsRout = require('./routes/cards');
+const auth = require('./middlewares/auth');
+const errors = require('./middlewares/errors');
+const NotFoundError = require('./errors/not-found-err');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const allowedCors = [
   'http://mesto.kolomeytsev.nomoredomains.club',
