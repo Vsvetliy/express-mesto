@@ -67,7 +67,6 @@ exports.usersLogin = function (req, res, next) {
           // token - наш JWT токен, который мы отправляем
           maxAge: 604800000,
           httpOnly: true,
-          domain: 'localhost',
         })
         .send({ message: 'Авторизация успешна' })
         .end();
