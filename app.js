@@ -12,6 +12,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const allowedCors = [
   'http://mesto.kolomeytsev.nomoredomains.club',
+  'http://localhost:3000',
 ];
 
 const { PORT = 3000 } = process.env;
