@@ -47,8 +47,8 @@ app.use((req, res, next) => {
     // завершаем обработку запроса и возвращаем результат клиенту
     return res.end();
   }
-
-  next();
+  throw new NotFoundError('11111Cтраница не найдена');
+  //next();
 });
 
 app.post('/signin', celebrate({
