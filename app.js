@@ -44,9 +44,9 @@ app.post('/signup', celebrate({
 }), usersControl.usersPost);
 
 app.use(auth);
-app.use('/users', usersRout);
+//app.use('/users', usersRout);
 
-app.use('/cards', cardsRout);
+//app.use('/cards', cardsRout);
 
 app.use('/*', (req, res) => {
   throw new NotFoundError('Cтраница не найдена');
