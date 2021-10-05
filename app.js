@@ -34,21 +34,21 @@ app.use((req, res, next) => {
   const requestHeaders = req.headers['access-control-request-headers'];
   console.log(123);
   // проверяем, что источник запроса есть среди разрешённых
-  if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-  }
-  if (method === 'OPTIONS') {
-    // разрешаем кросс-доменные запросы любых типов (по умолчанию)
-    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
-  }
-  if (method === 'OPTIONS') {
-    // разрешаем кросс-доменные запросы с этими заголовками
-    res.header('Access-Control-Allow-Headers', requestHeaders);
-    // завершаем обработку запроса и возвращаем результат клиенту
-    return res.end();
-  }
-  throw new NotFoundError('11111Cтраница не найдена');
-  //next();
+  // if (allowedCors.includes(origin)) {
+  res.header('Access-Control-Allow-Origin', '*');
+  // }
+  // if (method === 'OPTIONS') {
+  // разрешаем кросс-доменные запросы любых типов (по умолчанию)
+  res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+  // }
+  // if (method === 'OPTIONS') {
+  // разрешаем кросс-доменные запросы с этими заголовками
+  res.header('Access-Control-Allow-Headers', requestHeaders);
+  // завершаем обработку запроса и возвращаем результат клиенту
+  return res.end();
+  // }
+
+  // next();
 });
 
 app.post('/signin', celebrate({
