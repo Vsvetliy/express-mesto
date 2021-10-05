@@ -38,7 +38,7 @@ app.use((req, res, next) => {
   console.log(123);
   // проверяем, что источник запроса есть среди разрешённых
   if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', origin);
   }
   if (method === 'OPTIONS') {
   // разрешаем кросс-доменные запросы любых типов (по умолчанию)
