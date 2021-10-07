@@ -62,14 +62,14 @@ exports.usersLogin = function (req, res, next) {
       const token = jwt.sign({ _id: findedUser._id }, 'secret-key', { expiresIn: '7d' });
 
       // вернём токен
-      res
-        .cookie('jwt', token, {
-          // token - наш JWT токен, который мы отправляем
-          maxAge: 604800000,
-          httpOnly: true,
-        })
-        .send({ message: 'Авторизация успешна' })
-        .end();
+      res.send({ token });
+      // .cookie('jwt', token, {
+      //   // token - наш JWT токен, который мы отправляем
+      //   maxAge: 604800000,
+      //   httpOnly: true,
+      // })
+      // .send({ message: 'Авторизация успешна' })
+      // .end();
     })
     .catch(next);
 };
