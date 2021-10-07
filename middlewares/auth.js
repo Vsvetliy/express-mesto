@@ -3,7 +3,7 @@ const LoginPasswordError = require('../errors/login-password-error');
 
 module.exports = (req, res, next) => {
   // достаём авторизационный заголовок
-  const authorization = req.headers.cookie;
+  const authorization = req.headers.Authorization;
 
   // убеждаемся, что он есть или начинается с Bearer
   if (!authorization || !authorization.startsWith('jwt=')) {
