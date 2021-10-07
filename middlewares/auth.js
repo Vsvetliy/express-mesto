@@ -11,8 +11,8 @@ module.exports = (req, res, next) => {
   // if (!authorization || !authorization.startsWith('jwt=')) {
     throw new LoginPasswordError('Необходима авторизация1');
   }
-
-  const token = authorization.replace('jwt=', '');
+  const token = authorization.replace('Bearer ', '');
+  // const token = authorization.replace('jwt=', '');
   console.log(token);
   let payload;
   try {
