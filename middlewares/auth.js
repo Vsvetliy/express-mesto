@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
   // убеждаемся, что он есть или начинается с Bearer
   if (!authorization || !authorization.startsWith('Bearer ')) {
   // if (!authorization || !authorization.startsWith('jwt=')) {
-    throw new LoginPasswordError('Необходима авторизация');
+    throw new LoginPasswordError('Необходима авторизация1');
   }
 
   const token = authorization.replace('jwt=', '');
@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
     payload = jwt.verify(token, 'secret-key');
   } catch (err) {
     // отправим ошибку, если не получилось
-    throw new LoginPasswordError('Необходима авторизация');
+    throw new LoginPasswordError('Необходима авторизация2');
   }
   req.user = payload; // записываем пейлоуд в объект запроса
 
