@@ -44,7 +44,9 @@ exports.cardsDel = function (req, res, next) {
 };
 
 exports.cardsAddLikes = function (req, res, next) {
+  console.log(req.params.cardId);
   Cards.findByIdAndUpdate(
+
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
     { new: true },
