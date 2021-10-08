@@ -44,6 +44,8 @@ exports.cardsDel = function (req, res, next) {
 };
 
 exports.cardsAddLikes = function (req, res, next) {
+  console.log('111');
+  console.log('req.params.cardId');
   console.log(req.params.cardId);
   Cards.findByIdAndUpdate(
 
