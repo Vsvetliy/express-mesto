@@ -12,7 +12,7 @@ const cardSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /^(http|https):\/\/(www.)?[a-zA-Z0-9.\-_~:/?#[\]@!$&'()*+,;=]*$/.test(v);
+        return /^(http|https):\/\/(www.)?[a-zA-Z0-9.\-_~:/?#[\]@%!$&'()*+,;=]*$/.test(v);
       },
       message: (props) => `${props.value} is not a valid`,
     },
