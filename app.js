@@ -12,6 +12,7 @@ const NotFoundError = require('./errors/not-found-err');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const allowedCors = [
+  'https://mesto.kolomeytsev.nomoredomains.club',
   'http://mesto.kolomeytsev.nomoredomains.club',
   'http://localhost:3000',
 ];
