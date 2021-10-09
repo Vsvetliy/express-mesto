@@ -14,7 +14,7 @@ cardsRout.post('/', celebrate({
 }), cardsControl.cardsPost);
 cardsRout.delete('/:cardId', cardsControl.cardsDel);
 
-cardsRout.put('/:cardId/likes', cardsControl.cardsAddLikes);
-cardsRout.delete('/:cardId/likes', cardsControl.cardsDelLikes);
+cardsRout.put('/likes/:cardId', cardsControl.cardsAddLikes);
+cardsRout.delete('/likes/:cardId', cardsControl.cardsDelLikes);
 
 module.exports = cardsRout;

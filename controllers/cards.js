@@ -44,16 +44,14 @@ exports.cardsDel = function (req, res, next) {
 };
 
 exports.cardsAddLikes = function (req, res, next) {
-  console.log(req);
-  console.log('req.params.cardId');
   console.log(req.params.cardId);
   Cards.findByIdAndUpdate(
 
-    
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
+
     .then((card) => cathIdError(res, card))
     .catch(next);
 };
