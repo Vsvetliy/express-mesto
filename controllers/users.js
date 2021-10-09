@@ -12,6 +12,7 @@ const formattedUser = function (user) {
     about: user.about,
     id: user.id,
     avatar: user.avatar,
+    email: user.email,
   };
 };
 
