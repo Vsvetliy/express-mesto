@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const LoginPasswordError = require('../errors/login-password-error');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 module.exports = (req, res, next) => {
   // достаём авторизационный заголовок
   // const authorization = req.headers.cookie;
@@ -17,7 +19,7 @@ module.exports = (req, res, next) => {
   let payload;
   try {
     // попытаемся верифицировать токен
-    payload = jwt.verify(token, 'secret-key');
+    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'secret-key');
   } catch (err) {
     // отправим ошибку, если не получилось
     throw new LoginPasswordError('Необходима авторизация2');
