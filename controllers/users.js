@@ -2,6 +2,8 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 const NotFoundError = require('../errors/not-found-err');
 const ValidationError = require('../errors/validation-error');
 const LoginPasswordError = require('../errors/login-password-error');
@@ -60,7 +62,8 @@ exports.usersLogin = function (req, res, next) {
       }
 
       // создадим токен
-      const token = jwt.sign({ _id: findedUser._id }, 'secret-key', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: findedUser._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'secret-key', { expiresIn: '7d' });
 
       // вернём токен
       res.send({ token });
