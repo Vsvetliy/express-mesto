@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const isURL = require('isurl');
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -12,7 +13,8 @@ const cardSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return /^(http|https):\/\/(www.)?[a-zA-Z0-9.\-_~:/?#[\]@%!$&'()*+,;=]*$/.test(v);
+        return isURL.lenient(v);
+        // return /^(http|https):\/\/(www.)?[a-zA-Z0-9.\-_~:/?#[\]@%!$&'()*+,;=]*$/.test(v);
       },
       message: (props) => `${props.value} is not a valid`,
     },
