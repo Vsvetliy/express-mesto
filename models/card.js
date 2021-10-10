@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 const isURL = require('isurl');
 
 const cardSchema = new mongoose.Schema({
@@ -13,7 +14,7 @@ const cardSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator(v) {
-        return isURL.lenient(v);
+        return validator.isURL(v);
         // return /^(http|https):\/\/(www.)?[a-zA-Z0-9.\-_~:/?#[\]@%!$&'()*+,;=]*$/.test(v);
       },
       message: (props) => `${props.value} is not a valid`,
