@@ -20,9 +20,18 @@ cardsRout.post('/', celebrate({
 
   }),
 }), cardsControl.cardsPost);
-cardsRout.delete('/:cardId', cardsControl.cardsDel);
+cardsRout.delete('/:cardId', celebrate({
+  cardId: Joi.string().length(24).hex(),
+}),
+cardsControl.cardsDel);
 
-cardsRout.put('/likes/:cardId', cardsControl.cardsAddLikes);
-cardsRout.delete('/likes/:cardId', cardsControl.cardsDelLikes);
+cardsRout.put('/likes/:cardId', celebrate({
+  cardId: Joi.string().length(24).hex(),
+}),
+cardsControl.cardsAddLikes);
+cardsRout.delete('/likes/:cardId', celebrate({
+  cardId: Joi.string().length(24).hex(),
+}),
+cardsControl.cardsDelLikes);
 
 module.exports = cardsRout;
