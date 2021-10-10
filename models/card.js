@@ -20,7 +20,6 @@ const cardSchema = new mongoose.Schema({
     // validate: {
     //   validator(v) {
     //     return validator.isURL(v);
-    //     // return /^(http|https):\/\/(www.)?[a-zA-Z0-9.\-_~:/?#[\]@%!$&'()*+,;=]*$/.test(v);
     //   },
     //   // message: (props) => `${props.value} is not a valid`,
     // },

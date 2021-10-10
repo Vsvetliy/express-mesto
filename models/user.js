@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validate = require('validator');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -12,9 +13,8 @@ const userSchema = new mongoose.Schema({
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
     validate: {
       validator(v) {
-        return /^(http|https):\/\/(www.)?[a-zA-Z0-9.\-_~:/?#[\]@%!$&'()*+,;=]*$/.test(v);
+        return validate.isURL(v);
       },
-      message: (props) => `${props.value} is not a valid`,
     },
 
   },
@@ -30,6 +30,11 @@ const userSchema = new mongoose.Schema({
     maxlength: 30,
     required: true,
     unique: true,
+    validate: {
+      validator(v) {
+        return validate.isEmail(v);
+      },
+    },
   },
   password: {
     type: String,
