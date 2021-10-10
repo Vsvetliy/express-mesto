@@ -1,13 +1,13 @@
 const dotenv = require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const { celebrate, Joi } = require('celebrate');
+const { celebrate, Joi, errors } = require('celebrate');
 const cors = require('cors');
 const usersRout = require('./routes/users');
 const usersControl = require('./controllers/users');
 const cardsRout = require('./routes/cards');
 const auth = require('./middlewares/auth');
-const errors = require('./middlewares/errors');
+const error = require('./middlewares/error');
 const NotFoundError = require('./errors/not-found-err');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
@@ -91,7 +91,8 @@ app.use('/*', (req, res) => {
 });
 //  логгер ошибок
 app.use(errorLogger);
-app.use(errors);
+app.use(errors());
+app.use(error);
 
 app.listen(PORT, () => {
   console.log(`App listening on porl ${PORT}`);
