@@ -21,17 +21,23 @@ cardsRout.post('/', celebrate({
   }),
 }), cardsControl.cardsPost);
 cardsRout.delete('/:cardId', celebrate({
-  cardId: Joi.string().length(24).hex(),
+  params: Joi.object().keys({
+    cardId: Joi.string().length(24).hex(),
+  }),
 }),
 cardsControl.cardsDel);
 
 cardsRout.put('/likes/:cardId', celebrate({
-  cardId: Joi.string().length(24).hex(),
+  params: Joi.object().keys({
+    cardId: Joi.string().length(24).hex(),
+  }),
 }),
 cardsControl.cardsAddLikes);
 
 cardsRout.delete('/likes/:cardId', celebrate({
-  cardId: Joi.string().length(24).hex(),
+  params: Joi.object().keys({
+    cardId: Joi.string().length(24).hex(),
+  }),
 }),
 cardsControl.cardsDelLikes);
 
