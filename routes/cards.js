@@ -1,6 +1,6 @@
 const express = require('express');
 const { celebrate, Joi } = require('celebrate');
-const validator = require('validator');
+const validator = require('../node_modules/validator');
 
 const cardsRout = express.Router();
 const cardsControl = require('../controllers/cards');
@@ -29,6 +29,7 @@ cardsRout.put('/likes/:cardId', celebrate({
   cardId: Joi.string().length(24).hex(),
 }),
 cardsControl.cardsAddLikes);
+
 cardsRout.delete('/likes/:cardId', celebrate({
   cardId: Joi.string().length(24).hex(),
 }),
