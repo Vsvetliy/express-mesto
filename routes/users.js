@@ -1,8 +1,16 @@
 const express = require('express');
 const { celebrate, Joi } = require('celebrate');
+const validator = require('../node_modules/validator');
 
 const usersRout = express.Router();
 const usersControl = require('../controllers/users');
+
+const validateURL = (value) => {
+  if (!validator.isURL(value, { require_protocol: true })) {
+    throw new Error('Неправильный формат ссылки');
+  }
+  return value;
+};
 
 usersRout.get('/', usersControl.usersGet);
 usersRout.get('/me', usersControl.usersGetMe);
@@ -18,7 +26,7 @@ usersRout.patch('/me', celebrate({
 
 usersRout.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required(),
+    avatar: Joi.string().required().custom(validateURL),
   }),
 }),
 usersControl.usersPatchAva);
