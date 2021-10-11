@@ -14,7 +14,11 @@ const validateURL = (value) => {
 
 usersRout.get('/', usersControl.usersGet);
 usersRout.get('/me', usersControl.usersGetMe);
-usersRout.get('/:id', usersControl.usersGetId);
+usersRout.get('/:id', celebrate({
+  params: Joi.object().keys({
+    cardId: Joi.string().length(24).hex(),
+  }),
+}), usersControl.usersGetId);
 
 usersRout.patch('/me', celebrate({
   body: Joi.object().keys({
