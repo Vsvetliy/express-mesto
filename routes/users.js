@@ -16,7 +16,7 @@ usersRout.get('/', usersControl.usersGet);
 usersRout.get('/me', usersControl.usersGetMe);
 usersRout.get('/:id', celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().length(24).hex(),
+    id: Joi.string().length(24).hex(),
   }),
 }), usersControl.usersGetId);
 

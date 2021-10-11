@@ -7,6 +7,7 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 const NotFoundError = require('../errors/not-found-err');
 const ValidationError = require('../errors/validation-error');
 const LoginPasswordError = require('../errors/login-password-error');
+const ConflictErr = require('../errors/ConflictErr');
 
 const formattedUser = function (user) {
   return {
@@ -67,13 +68,6 @@ exports.usersLogin = function (req, res, next) {
 
       // вернём токен
       res.send({ token });
-      // .cookie('jwt', token, {
-      //   // token - наш JWT токен, который мы отправляем
-      //   maxAge: 604800000,
-      //   httpOnly: true,
-      // })
-      // .send({ message: 'Авторизация успешна' })
-      // .end();
     })
     .catch(next);
 };
@@ -92,7 +86,7 @@ exports.usersPost = function (req, res, next) {
   User.findOne({ email: req.body.email })
     .then((oldUser) => {
       if (oldUser) {
-        throw new ValidationError('Пользователь с таким email уже существует');
+        throw new ConflictErr('Пользователь с таким email уже существует');
       }
 
       return bcrypt.hash(req.body.password, 10);
